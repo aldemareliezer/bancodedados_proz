@@ -1,0 +1,31 @@
+CREATE DATABASE Escola;
+
+USE Escola;
+
+CREATE TABLE Alunos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    idade INT,
+    cidade VARCHAR(50)
+);
+
+CREATE TABLE Cursos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    descricao TEXT,
+    duracao INT
+);
+
+INSERT INTO Alunos (nome, idade, cidade) VALUES
+    ('João', 20, 'São Paulo'),
+    ('Maria', 22, 'Rio de Janeiro'),
+    ('Carlos', 25, 'Belo Horizonte');
+
+INSERT INTO Cursos (nome, descricao, duracao) VALUES
+    ('Matemática', 'Curso de matemática básica', 60),
+    ('Inglês', 'Curso de inglês intermediário', 90),
+    ('Programação', 'Curso de introdução à programação', 120);
+
+SELECT Alunos.nome AS Nome_Aluno, Alunos.idade, Alunos.cidade, Cursos.nome AS Nome_Curso, Cursos.descricao
+FROM Alunos
+INNER JOIN Cursos ON Alunos.id = Cursos.id;
