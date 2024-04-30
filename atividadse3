@@ -1,0 +1,42 @@
+-- Passo 1: Criar o banco de dados
+CREATE DATABASE IF NOT EXISTS ExemploDB;
+
+-- Usar o banco de dados criado
+USE ExemploDB;
+
+-- Passo 2: Criar tabelas
+CREATE TABLE IF NOT EXISTS Clientes (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50),
+    Email VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS Compras (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ClienteID INT,
+    Produto VARCHAR(50),
+    Preco DECIMAL(10, 2),
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ID)
+);
+
+-- Passo 3: Criar o trigger
+DELIMITER //
+CREATE TRIGGER After_Insert_Compras
+AFTER INSERT ON Compras
+FOR EACH ROW
+BEGIN
+    DECLARE cliente_nome VARCHAR(50);
+    DECLARE cliente_email VARCHAR(50);
+    SELECT Nome, Email INTO cliente_nome, cliente_email FROM Clientes WHERE ID = NEW.ClienteID;
+    INSERT INTO Log_Compras (Cliente, Produto, Preco) VALUES (cliente_nome, NEW.Produto, NEW.Preco);
+END//
+DELIMITER ;
+
+-- Criar tabela de log para armazenar informações sobre as compras
+CREATE TABLE IF NOT EXISTS Log_Compras (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Cliente VARCHAR(50),
+    Produto VARCHAR(50),
+    Preco DECIMAL(10, 2),
+    DataHora TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
