@@ -1,0 +1,14 @@
+DELIMITER $$
+
+CREATE PROCEDURE RelatorioQuantidadeProdutosCompradosPorDia()
+BEGIN
+    SELECT 
+        data_compra,
+        COUNT(*) AS quantidade_produtos_comprados
+    FROM 
+        compras
+    GROUP BY 
+        data_compra;
+END $$
+
+DELIMITER;
